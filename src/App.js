@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { FaCalendarAlt, FaTrash, FaEdit, FaCheckCircle, FaClock, FaCalendarTimes } from "react-icons/fa";
-import { MdSaveAs, MdDeleteSweep, MdFilterListAlt } from "react-icons/md";
-import { FaArrowUpWideShort, FaArrowDownShortWide, FaArrowDownUpAcrossLine } from "react-icons/fa6";
+import { MdSaveAs, MdDeleteSweep, MdFilterListAlt, MdFilterAltOff, MdPendingActions } from "react-icons/md";
+import { FaArrowUpWideShort, FaArrowDownShortWide, FaArrowDownUpAcrossLine, FaArrowUpRightDots } from "react-icons/fa6";
+import { GiChecklist } from "react-icons/gi";
 
 function App() {
   const [todo, settodo] = useState('');
@@ -15,18 +16,16 @@ function App() {
   const [duedate, setduedate] = useState('');
   const [updatedate, setupdatedate] = useState('');
   const [searchvalue, setsearchvalue] = useState('');
-  const [searchtodos, setsearchtodos] = useState([]);
   const [priority, setPriority] = useState('High');
   const [filter, setFilter] = useState('');
 
-  const handlechange = (e) => {
-    settodo(e.target.value);
-  }
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }, [todos]);
 
   const addtodo = () => {
     if (!todo.trim()) return;
     settodos([...todos, { text: todo, done: false, enddate: duedate, priority }]);
-    console.log(priority);
     settodo('');
     setduedate('');
     setPriority('High');
@@ -62,29 +61,33 @@ function App() {
     setupdatedate('');
   }
 
-  const clearall = () => {
-    settodos([]);
+  const clearall = () => settodos([]);
+
+  const handlefilter = (e) => {
+    setFilter(e.target.name);
   }
 
-  useEffect(() => {
-    if (searchvalue.trim() === "") {
-      setsearchtodos([]);
-    } else {
-      const searchtodos = todos.map((todo, index) => ({
-        ...todo, searchedindex: index
-      }))
-        .filter(todo =>
-          todo.text.toLowerCase().includes(searchvalue.toLowerCase())
-        );
-      setsearchtodos(searchtodos);
+  const displayTodos = useMemo(() => {
+    const priorityOrder = { High: 1, Medium: 2, Low: 3 };
+
+    let result = todos.map((todo, index) => ({ ...todo, originalIndex: index }));
+
+    if (filter === 'completed') {
+      result = result.filter(todo => todo.done);
+    } else if (filter === 'remaining') {
+      result = result.filter(todo => !todo.done);
+    } else if (filter === 'priority') {
+      result = result.sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
     }
-  }, [searchvalue, todos]);
 
+    if (searchvalue.trim() !== '') {
+      result = result.filter(todo =>
+        todo.text.toLowerCase().includes(searchvalue.toLowerCase())
+      );
+    }
 
-
-  useEffect(() => {
-    localStorage.setItem("todos", JSON.stringify(todos));
-  }, [todos]);
+    return result;
+  }, [todos, filter, searchvalue]);
 
   return (
     <div className="bg-zinc-800 min-h-screen flex flex-col items-center text-white">
@@ -103,7 +106,7 @@ function App() {
               className="px-3 py-1 text-black pr-52 rounded-lg min-w-40 text-sm h-8 border-none focus:outline-none sm:min-w-72 sm:py-2 sm:text-base"
               type="text"
               value={todo}
-              onChange={handlechange}
+              onChange={(e) => settodo(e.target.value)}
               placeholder="Enter To Do"
             />
 
@@ -139,23 +142,65 @@ function App() {
           </button>
         </div>
 
+        {/* Filter and search input */}
         <div className='absolute flex right-6 gap-2'>
-          <div className='relative group'>
-            <button className='text-black p-1 rounded hover:bg-gray-200'>
+          <div className='relative group '>
+            <button className='text-white p-1 rounded hover:text-green-300'>
               <MdFilterListAlt size={24} />
             </button>
-            <div className='absolute right-0 mt-2 bg-white rounded invisible group-hover:visible duration-200 transition-all'>
-              <ul className='p-2 space-y-2 text-sm text-gray-700'>
-                <li><button className='w-full text-left hover:bg-gray-200 px-2 py-1 rounded'>Completed</button></li>
-                <li><button className='w-full text-left hover:bg-gray-200 px-2 py-1 rounded'>Remaining</button></li>
-                <li><button className='w-full text-left hover:bg-gray-200 px-2 py-1 rounded'>Priority</button></li>
-              </ul>
+            <div className='absolute right-0 mt-2 bg-gray-500 rounded invisible group-hover:visible duration-200 transition-all divide-y divide-black'>
+              <div>
+                <ul className='p-2 space-y-2 text-sm text-white'>
+                  <li>
+                    <button
+                      value={filter}
+                      name='completed'
+                      className='flex w-full text-left hover:bg-gray-700 px-2 py-1 rounded'
+                      onClick={handlefilter}>
+                      <GiChecklist size={24} className='text-green-500 mr-1' />
+                      Completed
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      value={filter}
+                      name='remaining'
+                      className='flex w-full text-left hover:bg-gray-700 px-2 py-1 rounded'
+                      onClick={handlefilter}>
+                      <MdPendingActions size={20} className='text-yellow-500 mr-2' />
+                      Remaining
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      value={filter}
+                      name='priority'
+                      onClick={handlefilter}
+                      className='flex w-full items-center text-left px-2 py-1 rounded hover:bg-gray-700 cursor-pointer transition-colors duration-150'
+                    >
+                      <FaArrowUpRightDots
+                        size={16}
+                        className='text-cyan-400 mr-3'
+                      />
+                      Priority
+                    </button>
+                  </li>
+                </ul>
+              </div>
+              <button
+                // onClick={clearFilter}
+                className='flex justify-center w-full p-2 text-red-500 hover:text-red-400 text-sm'
+              >
+                <MdFilterAltOff size={20} />
+                <span className='ml-1'>Clear Filter</span>
+              </button>
+
             </div>
           </div>
 
           <input
             type="search"
-            className='bg-white rounded px-2 py-1 text-black focus:outline-none w-32 sm:w-48'
+            className='bg-white rounded px-2 py-1 text-black focus:outline-none'
             placeholder="Search..."
             value={searchvalue}
             onChange={(e) => setsearchvalue(e.target.value)}
@@ -177,12 +222,12 @@ function App() {
       <div className="my-4 flex flex-col mx-3 w-fit">
         <h3 className="text-emerald-400 font-bold text-lg text-center mb-4 sm:text-2xl">{searchvalue.trim() ? "Your Searched MindList" : "Your MindList"}</h3>
         <ul className="space-y-3">
-          {(searchvalue.trim() ? searchtodos : todos).map((todo, index) => {
-            const realIndex = todo.searchedindex ?? index;
+          {displayTodos.map((todo, index) => {
+            const realIndex = todo.originalIndex;
             return (
               <li
                 className="bg-zinc-700 px-4 py-2 text-xs rounded-lg flex flex-col justify-between sm:py-2 sm:text-sm sm:min-h-10 sm:flex-row"
-                key={realIndex}
+                key={index}
               >
                 {/* Todo Text or Update Input */}
                 {update && updateindex === realIndex ? (
