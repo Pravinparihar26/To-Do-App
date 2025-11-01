@@ -19,8 +19,9 @@ function TodoControls({
     searchvalue,
     setsearchvalue
 }) {
+    
     return (
-        <div className='relative w-full flex flex-col lg:grid lg:grid-cols-3 items-center'>
+        <div className='w-full grid grid-cols-3 items-center'>
             {/* dark and light mode */}
             <DarkMode nightMode={nightMode} setnightMode={setnightMode} />
             <AddTodo

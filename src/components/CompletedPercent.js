@@ -1,7 +1,7 @@
 function CompletedPercent({nightMode, percentage}) {
     return (
         <div
-        className="w-28 h-28 rounded-full flex items-center justify-center"
+        className="w-28 h-28 rounded-full flex items-center justify-center mt-5"
         style={{
           background: `conic-gradient(#22c55e ${percentage * 3.6}deg,  ${nightMode ? "#27272a" : "#e5e7eb"} ${percentage * 3.6}deg)`,
         }}
