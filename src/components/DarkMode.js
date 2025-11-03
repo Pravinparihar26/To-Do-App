@@ -5,7 +5,7 @@ import { IoSunny } from "react-icons/io5";
 function DarkMode({nightMode, setnightMode}) {
     return (
         <div className='flex items-center justify-center'>
-            <FaMoon className='text-black dark:text-white' />
+            <FaMoon size={15} className='text-black dark:text-white' />
             <button
                 onClick={() => setnightMode(!nightMode)}
             >

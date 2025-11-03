@@ -130,7 +130,7 @@ function App() {
         searchvalue={searchvalue}
         setsearchvalue={setsearchvalue}
       />
-      <CompletedPercent nightMode={nightMode} percentage={percentage} />
+      <CompletedPercent nightMode={nightMode} percentage={percentage} todos={todos}/>
       <DisplayTodo
         todos={todos}
         searchvalue={searchvalue}

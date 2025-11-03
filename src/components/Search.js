@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { MdOutlineManageSearch } from "react-icons/md";
+import { IoClose } from "react-icons/io5";
 
 function Search({ searchvalue, setsearchvalue }) {
     const [open, setOpen] = useState(false);
@@ -25,8 +26,15 @@ function Search({ searchvalue, setsearchvalue }) {
                         />
                     )
                 }
-                <button onClick={() => setOpen((prev) => !prev)} className="right-1 text-black flex lg:hidden">
-                    <MdOutlineManageSearch size={24} className="" />
+                <button onClick={() => {
+                    setOpen((prev) => !prev);
+                    setsearchvalue('');
+                }}
+                    className={`pr-2 flex lg:hidden ${open ? "text-black" : "text-black dark:text-white"}`}>
+                    {
+                        open ? <IoClose /> : <MdOutlineManageSearch size={24} />
+                    }
+
                 </button>
             </div>
         </>

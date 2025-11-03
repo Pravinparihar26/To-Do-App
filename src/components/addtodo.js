@@ -71,38 +71,40 @@ function AddTodo({
 
             {
                 mobileViewAddTodo && (
-                    <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-10">
+                    <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-20">
                         <div className="bg-white text-black rounded flex flex-col">
-                            <>
-                                <input
-                                    className="p-2 m-2 border-b rounded-lg focus:outline-none focus:bg-gray-100"
-                                    type="text"
-                                    value={todo}
-                                    onChange={(e) => settodo(e.target.value)}
-                                    placeholder="Enter To Do"
-                                />
+                            <input
+                                className="p-2 m-2 border-b rounded-lg focus:outline-none focus:bg-gray-100"
+                                type="text"
+                                value={todo}
+                                onChange={(e) => settodo(e.target.value)}
+                                placeholder="Enter To Do"
+                            />
 
+                            <div className="flex flex-col m-2">
+                                <label className="text-sm text-gray-400 font-semibold mb-1 mx-2">Set Due Date</label>
                                 <input
-                                    className="p-2 m-2 border-b rounded-lg focus:outline-none focus:bg-gray-100"
+                                    className="p-2 border-b rounded-lg min-w-fit focus:outline-none"
                                     type="date"
                                     value={duedate}
                                     onChange={(e) => setduedate(e.target.value)}
                                 />
-                                <PrioritySelect priority={priority} setPriority={setPriority} />
-                                <button
-                                    disabled={!todo.trim()}
-                                    className={`m-auto my-2 px-2 py-1 rounded w-1/2  ${todo.trim()
-                                        ? "bg-green-400 hover:bg-green-500 text-black"
-                                        : "bg-gray-500 cursor-not-allowed text-gray-300"
-                                        }`}
-                                    onClick={() => {
-                                        addtodo();
-                                        setMobileViewAddTodo(false)
-                                    }}
-                                >
-                                    Add
-                                </button>
-                            </>
+                            </div>
+
+                            <PrioritySelect priority={priority} setPriority={setPriority} />
+                            <button
+                                disabled={!todo.trim()}
+                                className={`m-auto my-2 px-2 py-1 rounded w-1/2  ${todo.trim()
+                                    ? "bg-green-400 hover:bg-green-500 text-black"
+                                    : "bg-gray-500 cursor-not-allowed text-gray-300"
+                                    }`}
+                                onClick={() => {
+                                    addtodo();
+                                    setMobileViewAddTodo(false)
+                                }}
+                            >
+                                Add
+                            </button>
                             <hr className="border-t border-gray-300" />
                             <button
                                 onClick={() => setMobileViewAddTodo(false)}
