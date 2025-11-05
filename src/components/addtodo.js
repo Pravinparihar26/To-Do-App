@@ -71,7 +71,7 @@ function AddTodo({
 
             {
                 mobileViewAddTodo && (
-                    <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-20">
+                    <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-30">
                         <div className="bg-white text-black rounded flex flex-col">
                             <input
                                 className="p-2 m-2 border-b rounded-lg focus:outline-none focus:bg-gray-100"

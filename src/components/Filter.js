@@ -32,7 +32,7 @@ function Filter({ filter, handlefilter, clearFilter }) {
 
             {/* Dropdown menu */}
             <div
-                className={`absolute right-0 mt-2 bg-gray-500 rounded divide-y divide-black z-10 transition-all duration-200 
+                className={`absolute right-0 mt-2 bg-gray-500 rounded divide-y divide-black z-20 transition-all duration-200 
                     ${open ? "visible" : "invisible"} md:group-hover:visible
                     `}
             >

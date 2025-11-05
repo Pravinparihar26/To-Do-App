@@ -19,7 +19,7 @@ function DisplayTodo({
     clearall,
 }) {
     return (
-        <div className="my-4 flex flex-col mx-3 w-fit flex-1">
+        <div className="my-4 flex flex-col mx-5 w-fit flex-1">
             {todos.length ? (
                 <div>
                     <h3 className="text-green-500 font-bold text-lg text-center mb-4 sm:text-2xl">{searchvalue.trim() ? "Your Searched MindList" : "Your MindList"}</h3>
@@ -129,11 +129,11 @@ function DisplayTodo({
 
                     {/* Clear All Button */}
                     <button
-                        className={`bg-red-500 hover:bg-red-400 rounded flex mx-auto justify-center items-center my-3 font-bold px-2 py-[3px] max-h-5 mb-2 sm:min-h-7 sm:w-20 ${todos.length === 0 || searchvalue.trim() ? "invisible" : "visible"
+                        className={`bg-red-500 hover:bg-red-400 rounded flex mx-auto justify-center items-center my-3 font-bold px-2 py-3 max-h-5 mb-2 w-20 sm:min-h-7 ${todos.length === 0 || searchvalue.trim() ? "invisible" : "visible"
                             }`}
                         onClick={() => clearall()}
                     >
-                        <MdDeleteSweep className="text-lg" />
+                        <MdDeleteSweep size={22} className="text-lg" />
                     </button>
                 </div>
             ) : (
